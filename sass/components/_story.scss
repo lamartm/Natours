@@ -1,0 +1,78 @@
+.story {
+    width: 75%;
+    margin: 0 auto;
+    box-shadow: 0 3rem 6rem rgba($color-black, .1);
+    background-color: rgba($color-white, .6);
+    border-radius: 3px;
+    padding: 6rem;
+    padding-left: 9rem; // omdat je de cirkel -3rem naar links brengt neemt het ruimte in van de padding en ziet het er niet meer uniform uit, daarom doe je not links 9 rem padding
+    font-size: $default-font-size;
+    transform: skewX(-12deg);
+    
+    @include respond(tab-port) {
+        width: 100%;
+        padding: 4rem;
+        padding-left: 7rem;
+    }
+
+    @include respond(phone) {
+        transform: skewX(0);
+    }
+   // & > * { // hiermee zeg je dat je alle directe children moet selecteren aka shape en text, normaal zou je transform hier gebruiken en -12deg zetten zodat de tekst en image niet geskewed zijn, dit werkt wel met tekst alleen niet met image omdat je niet 2 keer een element kan transformen
+   //     transform: skewX(12deg);
+   // }
+
+    &__shape {
+        width: 15rem;
+        height: 15rem;
+        float: left;
+        shape-outside: circle(50% at 50% 50%); //definieert waar de content gaat floaten rondom het element, werkt alleen als de element zelf een float heeft en een breedte en hoogte
+        clip-path: circle(50% at 50% 50%);
+        transform: translateX(-3rem) skewX(12deg); //Je wilt niet spelen met margin of dergelijk als je een element die zit te floaten wilt positioneren, hiervoor gebruik je translate. SkewX zodat het niet -12deg geskewed raakt
+        overflow: hidden;
+        position: relative;
+
+        @include respond(phone) {
+            transform: translate(-3rem) skewX(0);
+        }
+    }
+
+    &__image {
+        height: 100%; //hiermee zeg je neem de 100% hoogte van de parent aka __shape: 15rem
+        transform: translateX(-4rem) scale(1.4);
+        backface-visibility: hidden; //gebruik backface-visibility als een translate niet werkt hoe het hoort te zijn
+        transition: all .5s;
+    }
+
+    &__text { //Zodat de tekst niet -12deg geskewed is
+        transform: skewX(12deg);
+
+        @include respond(phone) {
+            transform: skewX(0);
+        }
+    }
+
+    &__caption {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 20%);
+        color: $color-white;
+        text-transform: uppercase;
+        font-size: 1.7rem;
+        text-align: center;
+        opacity: 0;
+        transition: all .5s;
+        backface-visibility: hidden; 
+    }
+
+    &:hover &__caption {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    &:hover &__image {
+        transform: translateX(-4rem) scale(1);
+        filter: blur(3px) brightness(80%);
+    }
+}
